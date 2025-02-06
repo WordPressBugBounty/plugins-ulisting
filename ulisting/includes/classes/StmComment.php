@@ -162,7 +162,7 @@ class StmComment extends StmBaseModel{
 			"message" => ""
 		];
 		$user = new StmUser(get_current_user_id());
-		if($user){
+		if( $user ){
 			$data_for_validate = ulisting_sanitize_array($_POST);
 			$validator = new Validation();
 			$data_for_validate = $validator->sanitize($data_for_validate);
@@ -232,6 +232,16 @@ class StmComment extends StmBaseModel{
 		if(!isset($params["comment_type"]))
 			return $data;
 
+        if ( empty( $params['user_id'] ) || ! is_numeric( $params['user_id'] ) ) {
+            wp_send_json(
+                array(
+                    'message'    => 'Invalid user_id',
+                    'statusCode' => 400,
+                )
+            );
+        }
+
+        $user_id = intval( $params['user_id'] );
 
 		$query = StmComment::query()
 			->select("comments.*")
@@ -241,7 +251,7 @@ class StmComment extends StmBaseModel{
 			->where("comments.`comment_approved`", 1);
 
 		if(isset($params["user_id"]))
-			$query->where_raw("(meta.`meta_key` = 'ulisting_user_id' AND meta.`meta_value` = ".sanitize_text_field($params["user_id"]).")");
+			$query->where_raw("(meta.`meta_key` = 'ulisting_user_id' AND meta.`meta_value` = ".sanitize_text_field( $user_id ).")");
 
 
 		$total_query = clone $query;

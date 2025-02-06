@@ -4,8 +4,8 @@ Contributors: Stylemix
 Donate link: https://stylemixthemes.com
 Tags: listings, classified, classified ads, real estate
 Requires at least: 4.6
-Tested up to: 6.1
-Stable tag: 2.1.6
+Tested up to: 6.7.1
+Stable tag: 2.1.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -179,8 +179,12 @@ You can use advanced search forms to let users search for listings based on many
 
 == Changelog ==
 
+= 2.1.7 =
+- fixed: Minor bugs
+- Tested up to 6.7.1
+
 = 2.1.6 =
-- Fix: Added a check on the route to prevent unauthorised users from accessing this route.
+- fixed: Added a check on the route to prevent unauthorised users from accessing this route.
 
 = 2.1.5 =
 - fixed: Minor bugs

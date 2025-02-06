@@ -339,6 +339,24 @@ $wp_router->get( array(
 		'uri'  => ULISTING_BASE_URL.'/ulisting-page-statistics/listing',
 		'uses' => function(){
 			if(isset($_GET["type"]) AND isset($_GET["listing_id"])) {
+                if ( ! is_numeric( $_GET["listing_id"] ) ) {
+                    wp_send_json(
+                        array(
+                            'message'    => 'Invalid listing_id',
+                            'statusCode' => '400'
+                        )
+                    );
+                }
+
+                if ( ! is_numeric( $_GET["user_id"] ) ) {
+                    wp_send_json(
+                        array(
+                            'message'    => 'Invalid user_id',
+                            'statusCode' => '400'
+                        )
+                    );
+                }
+
 				$params = [
 					'type'          => sanitize_text_field($_GET['type']),
 					'listing_id'    => sanitize_text_field($_GET['listing_id']),
