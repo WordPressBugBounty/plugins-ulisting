@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:ignoreFile
 namespace uListing\Classes;
 
 use uListing\Admin\Classes\StmEmailTemplateManager;
@@ -1468,9 +1468,18 @@ class StmListing extends StmBaseModel
     {
         $result = array(
             'errors' => [],
-            'message' => null,
+            'message' => 'Not allowed',
             'status' => 'error',
         );
+
+        if ( ! current_user_can('edit_posts') ) {
+            wp_send_json( $result );
+            die();
+        }
+
+        if ( ! StmVerifyNonce::verifyAjaxNonce() || ! is_user_logged_in() ) {
+            wp_send_json( $result );
+        }
 
         $files = [];
         $user_plan = null;

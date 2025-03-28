@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:ignoreFile
 namespace uListing\Classes;
 
 use uListing\Admin\Classes\StmEmailTemplateManager;
@@ -85,9 +85,14 @@ class StmListingAuth {
 	public static function stm_listing_register() {
 		$result = array(
 			'errors'  => [],
-			'message' => null,
+			'message' => 'Not allowed',
 			'status'  => 'error'
 		);
+
+		if ( ! current_user_can('edit_posts') ) {
+            wp_send_json( $result );
+            die();
+        }
 
 		$request_body = file_get_contents( 'php://input' );
 		$data         = json_decode( $request_body, true );
@@ -233,6 +238,18 @@ class StmListingAuth {
 
 			do_action( "ulisting_profile_edit", [ 'user' => $user, 'data' => $validated_data ] );
 
+            $meta_keys = array( 'facebook', 'twitter', 'instagram', 'nickname', 'phone_mobile', 'phone_office', 'fax', 'url', 'address', 'latitude', 'longitude', 'license', 'tax_number', 'description', 'google_plus', 'youtube_play', 'linkedin' );
+            foreach ( $validated_data['user_meta'] as $k => $val ) {
+                if ( in_array( $k, $meta_keys, true ) ) {
+                    update_user_meta( $user->ID, $k, apply_filters( 'uListing-sanitize-data', $val ) );
+                } else {
+                    wp_send_json( array(
+                        'message' => 'Invalid meta key: ' . $k,
+                        'status'  => 'error'
+                    ) );
+                }
+            }
+
 			$result['status']  = 'success';
 			$result['message'] = esc_html__( 'Profile update completed successfully.', "ulisting" );
 
@@ -253,8 +270,11 @@ class StmListingAuth {
 				'user_email' => $email,
 			) );
 
+            $meta_keys = array( 'facebook', 'twitter', 'instagram', 'nickname', 'phone_mobile', 'phone_office', 'fax', 'url', 'address', 'latitude', 'longitude', 'license', 'tax_number', 'description', 'google_plus', 'youtube_play', 'linkedin' );
 			foreach ( $validated_data['user_meta'] as $k => $val ) {
-				update_user_meta( $user->ID, $k, apply_filters( 'uListing-sanitize-data', $val ) );
+                if ( in_array( $k, $meta_keys, true ) ) {
+                    update_user_meta( $user->ID, $k, apply_filters( 'uListing-sanitize-data', $val ) );
+                }
 			}
 
 		} else {

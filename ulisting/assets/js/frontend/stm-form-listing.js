@@ -294,6 +294,7 @@ if (typeof stm_listing_form_listing != "undefined") {
                 }
 
                 vm.formData.append('is_admin', vm.isAdmin || '')
+                vm.formData.append('nonce', window.ulistingAjaxNonce)
                 this.$http.post(currentAjaxUrl + '?action=stm_listing_ajax', vm.formData).then(function (response) {
                     vm.message = response.body['message'];
                     vm.status = response.body['status'];
