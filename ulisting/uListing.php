@@ -6,14 +6,14 @@
  * Author: StylemixThemes
  * Author URI: https://stylemixthemes.com/
  * Text Domain: ulisting
- * Version: 2.1.9
+ * Version: 2.2.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ULISTING_VERSION', '2.1.9' );
+define( 'ULISTING_VERSION', '2.2.0' );
 define( 'ULISTING_DB_VERSION', '2.0.8' );
 define( 'ULISTING_PATH', dirname( __FILE__ ) );
 define( 'ULISTING_BASE_URL', '/1/api' );
